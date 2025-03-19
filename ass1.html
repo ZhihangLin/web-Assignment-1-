@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expression Tree Calculator</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .calculator { width: 300px; margin: 50px auto; padding: 20px; border: 2px solid #333; border-radius: 10px; }
+        .display { width: 100%; height: 50px; font-size: 1.5em; text-align: right; padding: 5px; }
+        .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
+        button { font-size: 1.2em; padding: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" id="display" class="display" disabled>
+        <div class="buttons">
+            <button onclick="appendInput('7')">7</button>
+            <button onclick="appendInput('8')">8</button>
+            <button onclick="appendInput('9')">9</button>
+            <button onclick="appendInput('/')">/</button>
+            <button onclick="appendInput('4')">4</button>
+            <button onclick="appendInput('5')">5</button>
+            <button onclick="appendInput('6')">6</button>
+            <button onclick="appendInput('*')">*</button>
+            <button onclick="appendInput('1')">1</button>
+            <button onclick="appendInput('2')">2</button>
+            <button onclick="appendInput('3')">3</button>
+            <button onclick="appendInput('-')">-</button>
+            <button onclick="appendInput('0')">0</button>
+            <button onclick="appendInput('(')">(</button>
+            <button onclick="appendInput(')')">)</button>
+            <button onclick="appendInput('+')">+</button>
+            <button onclick="clearDisplay()">C</button>
+            <button onclick="calculateResult()" style="grid-column: span 3;">=</button>
+        </div>
+    </div>
+    <script>
+        function appendInput(value) {
+            document.getElementById("display").value += value;
+        }
+        
+        function clearDisplay() {
+            document.getElementById("display").value = "";
+        }
+        
+        function calculateResult() {
+            const infixExpr = document.getElementById("display").value;
+            const postfixExpr = infixToPostfix(infixExpr);
+            const result = evaluatePostfix(postfixExpr);
+            document.getElementById("display").value = result;
+        }
+        
+        function infixToPostfix(expression) {
+            const precedence = { '+': 1, '-': 1, '*': 2, '/': 2 };
+            const output = [];
+            const operators = [];
+            expression.split(/([()+\-*\/])/).filter(e => e.trim()).forEach(token => {
+                if (!isNaN(token)) {
+                    output.push(token);
+                } else if (token in precedence) {
+                    while (operators.length && precedence[operators[operators.length - 1]] >= precedence[token]) {
+                        output.push(operators.pop());
+                    }
+                    operators.push(token);
+                } else if (token === '(') {
+                    operators.push(token);
+                } else if (token === ')') {
+                    while (operators.length && operators[operators.length - 1] !== '(') {
+                        output.push(operators.pop());
+                    }
+                    operators.pop();
+                }
+            });
+            while (operators.length) {
+                output.push(operators.pop());
+            }
+            return output.join(' ');
+        }
+        
+        function evaluatePostfix(expression) {
+            const stack = [];
+            expression.split(" ").forEach(token => {
+                if (!isNaN(token)) {
+                    stack.push(Number(token));
+                } else {
+                    const b = stack.pop();
+                    const a = stack.pop();
+                    switch (token) {
+                        case '+': stack.push(a + b); break;
+                        case '-': stack.push(a - b); break;
+                        case '*': stack.push(a * b); break;
+                        case '/': stack.push(a / b); break;
+                    }
+                }
+            });
+            return stack.pop();
+        }
+    </script>
+</body>
+</html>
