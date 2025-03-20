@@ -89,32 +89,35 @@
     </div>
 
     <script>
-        const display = document.getElementById("display");
-        const buttons = document.querySelectorAll(".button");
-        let currentInput = "0";
+ const display = document.getElementById("display");
+const buttons = document.querySelectorAll(".button");
+let currentInput = "0";
 
-        buttons.forEach(button => {
-            button.addEventListener("click", () => {
-                const value = button.innerText;
+buttons.forEach(button => {
+    button.addEventListener("click", () => {
+        const value = button.innerText;
 
-                if (button.classList.contains("number") || button.classList.contains("decimal")) {
-                    if (currentInput === "0") currentInput = "";
-                    currentInput += value;
-                } else if (button.classList.contains("operator")) {
-                    currentInput += ` ${value} `;
-                } else if (button.classList.contains("equals")) {
-                    try {
-                        currentInput = eval(currentInput).toString();
-                    } catch {
-                        currentInput = "Error";
-                    }
-                } else if (button.classList.contains("clear")) {
-                    currentInput = "0";
-                }
+        if (button.classList.contains("number") || button.classList.contains("decimal")) {
+            if (currentInput === "0") currentInput = "";
+            currentInput += value;
+        } else if (button.classList.contains("operator")) {
+            currentInput += ` ${value} `;
+        } else if (button.classList.contains("parenthesis")) {
+            if (currentInput === "0") currentInput = ""; // Allow parentheses at the beginning
+            currentInput += value;
+        } else if (button.classList.contains("equals")) {
+            try {
+                currentInput = eval(currentInput).toString();
+            } catch {
+                currentInput = "Error";
+            }
+        } else if (button.classList.contains("clear")) {
+            currentInput = "0";
+        }
 
-                display.innerText = currentInput;
-            });
-        });
+        display.innerText = currentInput;
+    });
+});
     </script>
 </body>
 </html>
