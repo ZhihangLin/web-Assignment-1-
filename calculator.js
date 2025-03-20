@@ -1,60 +1,20 @@
-const display = document.getElementById("display");
-const numbersArr = document.querySelectorAll(".number");
-const operatorsArr = document.querySelectorAll(".operator");
-const parenthesisArr = document.querySelectorAll(".parenthesis");
-const decimalBtn = document.querySelector(".decimal");
-const equalsBtn = document.querySelector(".equals");
-const clearBtn = document.querySelector(".clear");
+// const numberButtons = document.querySelectorAll(".number_button");
+// const data = {
+//   runningSum: "",
+// };
 
-let expression = "0";
+// function updateView(elementId) {
+//   document.getElementById(elementId).textContent = data.runningSum;
+//   console.log("updating view", data.runningSum);
+// }
 
-const updateDisplay = () => {
-  display.innerText = expression;
-};
+// function updateRunningSum(value) {
+//   data.runningSum += value;
+//   updateView("runningSum");
+// }
 
-numbersArr.forEach(button => {
-  button.addEventListener("click", () => {
-    if (expression === "0") expression = "";
-    expression += button.innerText;
-    updateDisplay();
-  });
-});
-
-operatorsArr.forEach(button => {
-  button.addEventListener("click", () => {
-    if (!/[+\-*/]$/.test(expression)) {
-      expression += button.innerText;
-      updateDisplay();
-    }
-  });
-});
-
-parenthesisArr.forEach(button => {
-  button.addEventListener("click", () => {
-    expression += button.innerText;
-    updateDisplay();
-  });
-});
-
-decimalBtn.addEventListener("click", () => {
-  const lastNumber = expression.split(/[-+*/]/).pop();
-  if (!lastNumber.includes(".")) {
-    expression += ".";
-    updateDisplay();
-  }
-});
-
-equalsBtn.addEventListener("click", () => {
-  try {
-    expression = eval(expression).toString();
-    updateDisplay();
-  } catch {
-    expression = "Error";
-    updateDisplay();
-  }
-});
-
-clearBtn.addEventListener("click", () => {
-  expression = "0";
-  updateDisplay();
-});
+// numberButtons.forEach((button) => {
+//   button.addEventListener("click", (e) => {
+//     updateRunningSum(e.target.textContent);
+//   });
+// });
